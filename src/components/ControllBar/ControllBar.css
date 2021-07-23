@@ -1,0 +1,45 @@
+.ControllBar {
+  display: flex;
+  height: 100%;
+}
+
+.ControllBar__button {
+  width: 47px;
+  padding: 0;
+  border: 0;
+  border-right: 1px solid #9C9595;
+  box-sizing: border-box;
+  background-color: rgba(0, 0, 0, 0);
+  background-position: center;
+  background-repeat: no-repeat;
+  cursor: pointer;
+  transition: background-color .4s linear;
+}
+
+.ControllBar__button:hover {
+  background-color: #E8E8E8;
+}
+
+.ControllBar__button_play {
+  background-image: url('../../images/play.min.svg');
+}
+
+.ControllBar__button_stop {
+  background-image: url('../../images/stop.min.svg');
+}
+
+.ControllBar__button_prev {
+  background-image: url('../../images/prev.min.svg');
+}
+
+.ControllBar__button_back {
+  background-image: url('../../images/back.min.svg');
+}
+
+.ControllBar__button_forward {
+  background-image: url('../../images/forward.min.svg');
+}
+
+.ControllBar__button_next {
+  background-image: url('../../images/next.min.svg');
+}
