@@ -1,16 +1,20 @@
 // Modules to control application life and create native browser window
-const {app, BrowserWindow} = require('electron');
+const {app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 const isDev = require('electron-is-dev');
 
+let mainWindow;
+
 function createWindow () {
   // Create the browser window.
-  const mainWindow = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     minWidth: 1228,
     height: 802,
     frame: false,
     webPreferences: {
       nodeIntegration: true,
+      enableRemoteModule: true,
+      contextIsolation: false,
     },
   });
 
@@ -50,3 +54,19 @@ app.on('window-all-closed', function () {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
+
+ipcMain.handle('minimize-event', () => {
+  mainWindow.minimize();
+});
+
+ipcMain.handle('maximize-event', () => {
+  mainWindow.maximize();
+});
+
+ipcMain.handle('unmaximize-event', () => {
+  mainWindow.unmaximize();
+});
+
+ipcMain.handle('close-event', () => {
+  app.quit();
+});

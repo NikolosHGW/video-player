@@ -26,7 +26,7 @@
   z-index: 1;
 }
 
-.TopBar__button {
+.TopBar__button-file {
   margin-left: 13px;
   font-family: 'Open Sans', 'Helvetica Neue', 'Arial', sans-serif;
   font-weight: 600;
@@ -40,7 +40,7 @@
   -webkit-app-region: no-drag;
 }
 
-.TopBar__button:hover {
+.TopBar__button-file:hover {
   color: #50B5FF;
 }
 
@@ -49,13 +49,12 @@
   align-items: center;
 }
 
-.TopBar__close-button {
+.TopBar__button {
   width: 34px;
   height: 30px;
   padding: 0;
   border: 0;
   background-color: rgba(0, 0, 0, 0);
-  background-image: url('../../images/close.min.svg');
   background-repeat: no-repeat;
   background-position: center;
   cursor: pointer;
@@ -63,42 +62,35 @@
   -webkit-app-region: no-drag;
 }
 
-.TopBar__close-button:hover {
+.TopBar__button_close {
+  background-image: url('../../images/close.min.svg');
+}
+
+.TopBar__button_close:hover {
   background-color: #ff2400;
 }
 
-.TopBar__expand-button {
-  width: 34px;
-  height: 30px;
-  padding: 0;
-  border: 0;
-  background-color: rgba(0, 0, 0, 0);
+.TopBar__button_expand {
   background-image: url('../../images/expand.min.svg');
-  background-repeat: no-repeat;
-  background-position: center;
-  cursor: pointer;
-  transition: background-color .4s linear;
-  -webkit-app-region: no-drag;
 }
 
-.TopBar__expand-button:hover {
+.TopBar__button_expand:hover {
   background-color: #E8E8E8;
 }
 
-.TopBar__min-button {
-  width: 34px;
-  height: 30px;
-  padding: 0;
-  border: 0;
-  background-color: rgba(0, 0, 0, 0);
-  background-image: url('../../images/min.min.svg');
-  background-repeat: no-repeat;
-  background-position: bottom 6px center;
-  cursor: pointer;
-  transition: background-color .4s linear;
-  -webkit-app-region: no-drag;
+.TopBar__button_back-expand {
+  background-image: url('../../images/backExpand.min.svg');
 }
 
-.TopBar__min-button:hover {
+.TopBar__button_back-expand:hover {
+  background-color: #E8E8E8;
+}
+
+.TopBar__button_min {
+  background-image: url('../../images/min.min.svg');
+  background-position: bottom 6px center;
+}
+
+.TopBar__button_min:hover {
   background-color: #E8E8E8;
 }
