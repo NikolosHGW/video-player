@@ -44,6 +44,47 @@
   color: #50B5FF;
 }
 
+.TopBar__list {
+  list-style: none;
+  display: none;
+  background-color: #C4C4C4;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  right: 23px;
+  top: 45px;
+}
+
+.TopBar__list_opened {
+  display: block;
+}
+
+.TopBar__line {
+  margin: 2px 0;
+}
+
+.TopBar__line:last-child {
+  margin-bottom: 0;
+}
+
+.TopBar__list-button {
+  width: 100px;
+  font-family: 'Open Sans', 'Helvetica Neue', 'Arial', sans-serif;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 17px;
+  border-radius: 0;
+  background-color: rgba(0, 0, 0, 0);
+  padding: 0;
+  border: 0;
+  transition: background-color .4s linear;
+  cursor: pointer;
+}
+
+.TopBar__list-button:hover {
+  background-color: #73787c;
+}
+
 .TopBar__right {
   display: flex;
   align-items: center;

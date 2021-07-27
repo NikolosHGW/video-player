@@ -7,6 +7,7 @@ const ipcRenderer = window.require('electron').ipcRenderer;
 
 export default function TopBar() {
   const [isMaximized, setIsMaximaized] = React.useState(false);
+  const [menuIsOpened, setMenuIsIpened] = React.useState(false);
 
   function handleMinimize() {
     ipcRenderer.invoke('minimize-event');
@@ -26,12 +27,27 @@ export default function TopBar() {
     ipcRenderer.invoke('close-event');
   }
 
+  function handleMenu() {
+    setMenuIsIpened(prev => !prev);
+  }
+
   return (
     <div className='TopBar'>
       <div className='TopBar__left'>
         <img className='TopBar__triangle' src={triangle} alt='треугольник' />
         <img className='TopBar__circle' src={circle} alt='круг' />
-        <button className='TopBar__button-file'>File</button>
+        <button onClick={handleMenu} className='TopBar__button-file'>File</button>
+        <ul onMouseLeave={handleMenu} className={`TopBar__list ${menuIsOpened && 'TopBar__list_opened'}`}>
+          <li className='TopBar__line'>
+            <button className='TopBar__list-button'>Open File</button>
+          </li>
+          <li className='TopBar__line'>
+            <button className='TopBar__list-button'>Open Folder</button>
+          </li>
+          <li className='TopBar__line'>
+            <button className='TopBar__list-button'>Exit</button>
+          </li>
+        </ul>
       </div>
       <div className='TopBar__right'>
         <button onClick={handleMinimize} className='TopBar__button TopBar__button_min' aria-label='развернуть'></button>
