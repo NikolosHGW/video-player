@@ -1,5 +1,5 @@
 // Modules to control application life and create native browser window
-const {app, BrowserWindow, ipcMain } = require('electron');
+const {app, BrowserWindow, ipcMain, dialog } = require('electron');
 const path = require('path');
 const isDev = require('electron-is-dev');
 
@@ -69,4 +69,18 @@ ipcMain.handle('unmaximize-event', () => {
 
 ipcMain.handle('close-event', () => {
   app.quit();
+});
+
+ipcMain.handle('open-file-event', () => {
+  dialog.showOpenDialog({
+    properties: ['openFile'],
+    filters: [
+      { name: 'Видео', extensions: ['mkv', 'avi', 'mp4'] },
+      { name: 'Все файлы', extensions: ['*'] },
+    ],
+  });
+});
+
+ipcMain.handle('open-folder-event', () => {
+  dialog.showOpenDialog({ properties: ['openDirectory'] });
 });

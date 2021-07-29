@@ -31,6 +31,14 @@ export default function TopBar() {
     setMenuIsIpened(prev => !prev);
   }
 
+  function openFile() {
+    ipcRenderer.invoke('open-file-event');
+  }
+
+  function openFolder() {
+    ipcRenderer.invoke('open-folder-event');
+  }
+
   return (
     <div className='TopBar'>
       <div className='TopBar__left'>
@@ -39,13 +47,13 @@ export default function TopBar() {
         <button onClick={handleMenu} className='TopBar__button-file'>File</button>
         <ul onMouseLeave={handleMenu} className={`TopBar__list ${menuIsOpened && 'TopBar__list_opened'}`}>
           <li className='TopBar__line'>
-            <button className='TopBar__list-button'>Open File</button>
+            <button onClick={openFile} className='TopBar__list-button'>Open File</button>
           </li>
           <li className='TopBar__line'>
-            <button className='TopBar__list-button'>Open Folder</button>
+            <button onClick={openFolder} className='TopBar__list-button'>Open Folder</button>
           </li>
           <li className='TopBar__line'>
-            <button className='TopBar__list-button'>Exit</button>
+            <button onClick={handleClose} className='TopBar__list-button'>Exit</button>
           </li>
         </ul>
       </div>
