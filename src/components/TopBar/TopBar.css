@@ -53,6 +53,7 @@
   position: relative;
   right: 23px;
   top: 45px;
+  z-index: 2;
 }
 
 .TopBar__list_opened {

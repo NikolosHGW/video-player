@@ -1,5 +1,5 @@
 // Modules to control application life and create native browser window
-const {app, BrowserWindow, ipcMain, dialog } = require('electron');
+const {app, BrowserWindow, ipcMain, dialog, protocol } = require('electron');
 const path = require('path');
 const isDev = require('electron-is-dev');
 
@@ -55,6 +55,13 @@ app.on('window-all-closed', function () {
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
 
+app.on('ready', () => {
+  protocol.registerFileProtocol('custom-protocol', (request, callback) => {
+    const url = request.url.substring(18);
+    callback({ path: path.normalize(`${url}`) });
+  });
+});
+
 ipcMain.handle('minimize-event', () => {
   mainWindow.minimize();
 });
@@ -76,11 +83,12 @@ ipcMain.handle('open-file-event', () => {
     properties: ['openFile'],
     filters: [
       { name: 'Видео', extensions: ['mkv', 'avi', 'mp4'] },
-      { name: 'Все файлы', extensions: ['*'] },
     ],
   });
 });
 
 ipcMain.handle('open-folder-event', () => {
-  dialog.showOpenDialog({ properties: ['openDirectory'] });
+  dialog.showOpenDialog({ properties: ['openDirectory'] })
+    .then(res => {console.log(res.filePaths)})
+    .catch(res => {console.log(res)});
 });
