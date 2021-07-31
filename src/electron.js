@@ -2,6 +2,7 @@
 const {app, BrowserWindow, ipcMain, dialog, protocol } = require('electron');
 const path = require('path');
 const isDev = require('electron-is-dev');
+const fs = require('fs');
 
 let mainWindow;
 
@@ -87,8 +88,9 @@ ipcMain.handle('open-file-event', () => {
   });
 });
 
-ipcMain.handle('open-folder-event', () => {
-  dialog.showOpenDialog({ properties: ['openDirectory'] })
-    .then(res => {console.log(res.filePaths)})
-    .catch(res => {console.log(res)});
+ipcMain.handle('open-folder-event', async () => {
+  const result = await dialog.showOpenDialog({ properties: ['openDirectory'] });
+  const dirPath = result.filePaths[0];
+  const files = fs.readdirSync(dirPath);
+  return `${dirPath}/${files[2]}`.replaceAll('\\', '/');
 });

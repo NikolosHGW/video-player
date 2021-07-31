@@ -6,8 +6,8 @@ import React from 'react';
 const ipcRenderer = window.require('electron').ipcRenderer;
 
 export default function TopBar() {
-  const [isMaximized, setIsMaximaized] = React.useState(false);
-  const [menuIsOpened, setMenuIsIpened] = React.useState(false);
+  const [isMaximized, setIsMaximaized] = React.useState<boolean>(false);
+  const [menuIsOpened, setMenuIsIpened] = React.useState<boolean>(false);
 
   function handleMinimize() {
     ipcRenderer.invoke('minimize-event');
@@ -36,7 +36,9 @@ export default function TopBar() {
   }
 
   function openFolder() {
-    ipcRenderer.invoke('open-folder-event');
+    ipcRenderer.invoke('open-folder-event')
+      .then(res => console.log(res))
+      .catch(err => console.log(err));
   }
 
   return (
