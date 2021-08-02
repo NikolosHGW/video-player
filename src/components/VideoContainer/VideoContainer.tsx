@@ -1,11 +1,16 @@
+import { useTypeSelector } from '../../redux/hooks/useTypeSelector';
 import './VideoContainer.css';
 
 export default function VideoContainer() {
+  const { videoUrl, videoType } = useTypeSelector(state => state.video);
+
   return (
     <div className='VideoContainer'>
-      <video className='VideoContainer__video' controls>
-        <source src={'custom-protocol://D:/dev/video.mp4'} type="video/mp4" />
-      </video>
+      {videoUrl !== '' && (
+        <video className='VideoContainer__video' controls>
+          <source src={`custom-protocol://${videoUrl}`} type={`video/${videoType}`} />
+        </video>
+      )}
     </div>
   );
 }

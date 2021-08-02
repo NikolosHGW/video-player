@@ -2,12 +2,14 @@ import './TopBar.css';
 import triangle from '../../images/poly2.min.svg';
 import circle from '../../images/circle.min.svg';
 import React from 'react';
+import { useDispatch } from 'react-redux';
 
 const ipcRenderer = window.require('electron').ipcRenderer;
 
 export default function TopBar() {
   const [isMaximized, setIsMaximaized] = React.useState<boolean>(false);
   const [menuIsOpened, setMenuIsIpened] = React.useState<boolean>(false);
+  const dispatch = useDispatch();
 
   function handleMinimize() {
     ipcRenderer.invoke('minimize-event');
@@ -37,7 +39,9 @@ export default function TopBar() {
 
   function openFolder() {
     ipcRenderer.invoke('open-folder-event')
-      .then(res => console.log(res))
+      .then(res => {
+        dispatch({ type: 'SET_VIDEO', payload: [res, 'mp4'] });
+      })
       .catch(err => console.log(err));
   }
 
