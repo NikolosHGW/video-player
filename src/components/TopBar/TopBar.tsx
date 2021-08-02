@@ -34,7 +34,14 @@ export default function TopBar() {
   }
 
   function openFile() {
-    ipcRenderer.invoke('open-file-event');
+    ipcRenderer.invoke('open-file-event')
+      .then(res => {
+        dispatch({
+          type: 'SET_VIDEO',
+          payload: [res.videoUrl, res.videoType],
+        });
+      })
+      .catch(err => console.log(err));
   }
 
   function openFolder() {

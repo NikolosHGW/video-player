@@ -58,7 +58,7 @@ app.on('window-all-closed', function () {
 
 app.on('ready', () => {
   protocol.registerFileProtocol('custom-protocol', (request, callback) => {
-    const url = request.url.substring(18);
+    const url = request.url.slice(18);
     callback({ path: path.normalize(`${url}`) });
   });
 });
@@ -79,13 +79,18 @@ ipcMain.handle('close-event', () => {
   app.quit();
 });
 
-ipcMain.handle('open-file-event', () => {
-  dialog.showOpenDialog({
+ipcMain.handle('open-file-event', async () => {
+  const result = await dialog.showOpenDialog({
     properties: ['openFile'],
     filters: [
       { name: 'Видео', extensions: ['mkv', 'avi', 'mp4'] },
     ],
   });
+  const filePath = result.filePaths[0];
+  return {
+    videoUrl: filePath.replaceAll('\\', '/'),
+    videoType: path.extname(filePath).slice(1),
+  };
 });
 
 ipcMain.handle('open-folder-event', async () => {
