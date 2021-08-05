@@ -4,6 +4,12 @@ const path = require('path');
 const isDev = require('electron-is-dev');
 const fs = require('fs');
 
+const extVideoMap = new Map([
+  ['.mkv', '.mkv'],
+  ['.avi', '.avi'],
+  ['.mp4', '.mp4']
+]);
+
 let mainWindow;
 
 function createWindow () {
@@ -88,14 +94,23 @@ ipcMain.handle('open-file-event', async () => {
   });
   const filePath = result.filePaths[0];
   return {
-    videoUrl: filePath.replaceAll('\\', '/'),
-    videoType: path.extname(filePath).slice(1),
+    videoUrl: filePath ? filePath.replaceAll('\\', '/') : '',
+    videoType: filePath ? path.extname(filePath).slice(1) : '',
   };
 });
 
 ipcMain.handle('open-folder-event', async () => {
   const result = await dialog.showOpenDialog({ properties: ['openDirectory'] });
-  const dirPath = result.filePaths[0];
+  const dirPath = result.filePaths[0]?.replaceAll('\\', '/');
+  if (!dirPath) {
+    return [];
+  }
   const files = fs.readdirSync(dirPath);
-  return `${dirPath}/${files[2]}`.replaceAll('\\', '/');
+  const videoUrls = files
+    .filter(file => {
+      const extension = path.extname(file);
+      return extension === extVideoMap.get(extension);
+    })
+    .map(videoFile => `${dirPath}/${videoFile}`);
+  return videoUrls;
 });
