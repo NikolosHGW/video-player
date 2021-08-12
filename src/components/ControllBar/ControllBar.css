@@ -24,6 +24,10 @@
   background-image: url('../../images/play.min.svg');
 }
 
+.ControllBar__button_pause {
+  background-image: url('../../images/pause.min.svg');
+}
+
 .ControllBar__button_stop {
   background-image: url('../../images/stop.min.svg');
 }
