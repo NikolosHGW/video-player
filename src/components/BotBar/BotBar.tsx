@@ -18,10 +18,17 @@ export const BotBar: FC<BotBarProps> = ({ videoRef }) => {
     }
   }
 
+  function stopMedia(setIsPaused: (bool: boolean) => void) {
+    videoRef?.current?.pause();
+    videoRef!.current!.currentTime = 0;
+    setIsPaused(false);
+  }
+
   return (
     <div className='BotBar'>
       <ControllBar
         playPauseMedia={playPauseMedia}
+        stopMedia={stopMedia}
       />
       <ProgressBar />
       <div className='BotBar__time'>

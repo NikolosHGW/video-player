@@ -3,11 +3,12 @@ import './ControllBar.css';
 
 interface ControllBarProps {
   playPauseMedia: (callback: (bool: boolean) => void) => void;
+  stopMedia: (callback: (bool: boolean) => void) => void;
 }
 
 export default function ControllBar(props: ControllBarProps) {
-  const { playPauseMedia } = props;
   const [isPlayed, setIsPlayed] = React.useState(false);
+  const { playPauseMedia, stopMedia } = props;
 
   return (
     <div className='ControllBar'>
@@ -16,7 +17,11 @@ export default function ControllBar(props: ControllBarProps) {
         aria-label='воспроизвести'
         onClick={() => playPauseMedia(setIsPlayed)}
       ></button>
-      <button className='ControllBar__button ControllBar__button_stop' aria-label='остановить'></button>
+      <button
+        className='ControllBar__button ControllBar__button_stop'
+        aria-label='остановить'
+        onClick={() => stopMedia(setIsPlayed)}
+      ></button>
       <button className='ControllBar__button ControllBar__button_prev' aria-label='предыдущий файл'></button>
       <button className='ControllBar__button ControllBar__button_back' aria-label='перемотать назад'></button>
       <button className='ControllBar__button ControllBar__button_forward' aria-label='перемотать вперёд'></button>
