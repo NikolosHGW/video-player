@@ -31,3 +31,71 @@
 .BotBar__ProgressBar {
   margin: 0 52px 0 17px;
 }
+
+.BotBar__controllBar {
+  display: flex;
+  height: 100%;
+}
+
+.BotBar__controllBar-button {
+  width: 47px;
+  padding: 0;
+  border: 0;
+  border-right: 1px solid #9C9595;
+  box-sizing: border-box;
+  background-color: rgba(0, 0, 0, 0);
+  background-position: center;
+  background-repeat: no-repeat;
+  cursor: pointer;
+  transition: background-color .4s linear;
+}
+
+.BotBar__controllBar-button:hover {
+  background-color: #E8E8E8;
+}
+
+.BotBar__controllBar-button_disabled {
+  background-color: rgb(232, 232, 232);
+  cursor: default;
+  opacity: .4;
+}
+
+.BotBar__controllBar-button_play {
+  background-image: url('../../images/play.min.svg');
+}
+
+.BotBar__controllBar-button_pause {
+  background-image: url('../../images/pause.min.svg');
+}
+
+.BotBar__controllBar-button_stop {
+  background-image: url('../../images/stop.min.svg');
+}
+
+.BotBar__controllBar-button_prev {
+  background-image: url('../../images/prev.min.svg');
+}
+
+.BotBar__controllBar-button_back {
+  background-image: url('../../images/back.min.svg');
+}
+
+.BotBar__controllBar-button_back_active {
+  box-sizing: border-box;
+  border: 1px solid black;
+  background-image: url('../../images/back.min.svg');
+}
+
+.BotBar__controllBar-button_forward {
+  background-image: url('../../images/forward.min.svg');
+}
+
+.BotBar__controllBar-button_forward_active {
+  box-sizing: border-box;
+  border: 1px solid black;
+  background-image: url('../../images/forward.min.svg');
+}
+
+.BotBar__controllBar-button_next {
+  background-image: url('../../images/next.min.svg');
+}

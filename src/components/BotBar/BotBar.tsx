@@ -1,5 +1,5 @@
-import { FC } from 'react';
-import ControllBar from '../ControllBar/ControllBar';
+import React, { FC } from 'react';
+import { useTypeSelector } from '../../redux/hooks/useTypeSelector';
 import ProgressBar from '../ProgressBar/ProgressBar';
 import './BotBar.css';
 
@@ -8,28 +8,149 @@ interface BotBarProps {
 }
 
 export const BotBar: FC<BotBarProps> = ({ videoRef }) => {
-  function playPauseMedia(setIsPaused: (bool: boolean) => void) {
+  const [isBlocked, setIsBlocked] = React.useState<boolean>(false);
+  const [isPlayed, setIsPlayed] = React.useState<boolean>(false);
+  const [isForwardWind, setIsForwardWind] = React.useState<boolean>(false);
+  const [isBackwardWind, setIsBackwardWind] = React.useState<boolean>(false);
+  const [intervalFwd, setIntervalFwd] = React.useState<NodeJS.Timeout | null>(null);
+  const [intervalRwd, setIntervalRwd] = React.useState<NodeJS.Timeout | null>(null);
+  const { videoUrl } = useTypeSelector(state => state.video);
+
+  function resetBackwardInterval() {
+    clearInterval(intervalRwd!);
+    setIsBackwardWind(false);
+  }
+
+  function resetForkwardInterval() {
+    clearInterval(intervalFwd!);
+    setIsForwardWind(false);
+  }
+
+  function playPauseMedia() {
+    resetBackwardInterval();
+    resetForkwardInterval();
     if(videoRef?.current?.paused) {
       videoRef?.current?.play();
-      setIsPaused(true);
+      setIsPlayed(true);
     } else {
       videoRef?.current?.pause();
-      setIsPaused(false);
+      setIsPlayed(false);
     }
   }
 
-  function stopMedia(setIsPaused: (bool: boolean) => void) {
+  function stopMedia() {
     videoRef?.current?.pause();
-    videoRef!.current!.currentTime = 0;
-    setIsPaused(false);
+    if (videoRef?.current?.currentTime) {
+      videoRef!.current!.currentTime = 0;
+    };
+    setIsPlayed(false);
+    clearInterval(intervalFwd!);
+    clearInterval(intervalRwd!);
+    setIsForwardWind(false);
+    setIsBackwardWind(false);
   }
+
+  function mediaBackward() {
+    clearInterval(intervalFwd!);
+    setIsForwardWind(false);
+
+    if (isBackwardWind) {
+      setIsBackwardWind(false);
+      clearInterval(intervalRwd!);
+      videoRef?.current?.play();
+      setIsPlayed(true);
+    } else {
+      setIsBackwardWind(true);
+      videoRef?.current?.pause();
+      setIsPlayed(false);
+      setIntervalRwd(setInterval(windBackward, 200));
+    }
+  }
+
+  function windBackward() {
+    if(videoRef?.current!.currentTime <= 1) {
+      setIsBackwardWind(false);
+      clearInterval(intervalRwd!);
+      stopMedia();
+    } else {
+      videoRef!.current!.currentTime -= 1;
+    }
+  }
+
+  function mediaForward() {
+    clearInterval(intervalRwd!);
+    setIsBackwardWind(false);
+
+    if (isForwardWind) {
+      setIsForwardWind(false);
+      clearInterval(intervalFwd!);
+      videoRef?.current?.play();
+      setIsPlayed(true);
+    } else {
+      setIsForwardWind(true);
+      videoRef?.current?.pause();
+      setIsPlayed(false);
+      setIntervalFwd(setInterval(windForward, 200));
+    }
+  }
+
+  function windForward() {
+    if(videoRef?.current!.currentTime >= videoRef?.current!.duration - 1) {
+      setIsForwardWind(false);
+      clearInterval(intervalFwd!);
+      stopMedia();
+    } else {
+      videoRef!.current!.currentTime += 1;
+    }
+  }
+
+  React.useEffect(() => {
+    if (!videoUrl) {
+      setIsBlocked(true);
+    } else {
+      setIsBlocked(false);
+    }
+  }, [videoUrl]);
 
   return (
     <div className='BotBar'>
-      <ControllBar
-        playPauseMedia={playPauseMedia}
-        stopMedia={stopMedia}
-      />
+      <div className='BotBar__controllBar'>
+        <button
+          className={`BotBar__controllBar-button ${isBlocked && 'BotBar__controllBar-button_disabled'} ${isPlayed ?
+            'BotBar__controllBar-button_pause'
+            :
+            'BotBar__controllBar-button_play'}`}
+          aria-label='воспроизвести'
+          onClick={playPauseMedia}
+          disabled={isBlocked}
+        ></button>
+        <button
+          className={`BotBar__controllBar-button ${isBlocked && 'BotBar__controllBar-button_disabled'} BotBar__controllBar-button_stop`}
+          aria-label='остановить'
+          onClick={stopMedia}
+          disabled={isBlocked}
+        ></button>
+        <button className={`BotBar__controllBar-button ${isBlocked && 'BotBar__controllBar-button_disabled'} BotBar__controllBar-button_prev`} aria-label='предыдущий файл'></button>
+        <button
+          className={`BotBar__controllBar-button ${isBlocked && 'BotBar__controllBar-button_disabled'} ${isBackwardWind ?
+            'BotBar__controllBar-button_back_active'
+            :
+            'BotBar__controllBar-button_back'}`}
+          aria-label='перемотать назад'
+          onClick={mediaBackward}
+          disabled={isBlocked}
+        ></button>
+        <button
+          className={`BotBar__controllBar-button ${isBlocked && 'BotBar__controllBar-button_disabled'} ${isForwardWind ?
+            'BotBar__controllBar-button_forward_active'
+            :
+            'BotBar__controllBar-button_forward'}`}
+          aria-label='перемотать вперёд'
+          onClick={mediaForward}
+          disabled={isBlocked}
+        ></button>
+        <button className={`BotBar__controllBar-button ${isBlocked && 'BotBar__controllBar-button_disabled'} BotBar__controllBar-button_next`} aria-label='следующий файл'></button>
+      </div>
       <ProgressBar />
       <div className='BotBar__time'>
         <span className='BotBar__timing'>0:48:17</span>
