@@ -3,6 +3,7 @@ import triangle from '../../images/poly2.min.svg';
 import circle from '../../images/circle.min.svg';
 import React from 'react';
 import { useDispatch } from 'react-redux';
+import { setVideo } from '../../redux/videoSlice';
 
 const ipcRenderer = window.require('electron').ipcRenderer;
 
@@ -36,10 +37,7 @@ export default function TopBar() {
   function openFile() {
     ipcRenderer.invoke('open-file-event')
       .then(res => {
-        dispatch({
-          type: 'SET_VIDEO',
-          payload: [{ videoUrl: res.videoUrl, videoType: res.videoType }],
-        });
+        dispatch(setVideo([{ videoUrl: res.videoUrl, videoType: res.videoType }]));
       })
       .catch(err => console.log(err));
   }
@@ -47,10 +45,7 @@ export default function TopBar() {
   function openFolder() {
     ipcRenderer.invoke('open-folder-event')
       .then(res => {
-        dispatch({
-          type: 'SET_VIDEO',
-          payload: res,
-        });
+        dispatch(setVideo(res));
       })
       .catch(err => console.log(err));
   }

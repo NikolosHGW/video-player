@@ -7,9 +7,3 @@ export interface IState {
   videos: IVideos[];
   currentIndex: number;
 }
-
-export interface IAction {
-  type: string;
-  payload: IVideos[];
-}
-

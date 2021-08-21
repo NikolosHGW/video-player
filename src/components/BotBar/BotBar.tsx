@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import { useDispatch } from 'react-redux';
 import { useTypeSelector } from '../../redux/hooks/useTypeSelector';
+import { setNextVideo, setPrevVideo } from '../../redux/videoSlice';
 import ProgressBar from '../ProgressBar/ProgressBar';
 import './BotBar.css';
 
@@ -108,18 +109,14 @@ export const BotBar: FC<BotBarProps> = ({ videoRef }) => {
     }
   }
 
-  function prevVideo() {
+  function handlePrevVideo() {
     stopMedia();
-    dispatch({
-      type: 'PREV_VIDEO',
-    });
+    dispatch(setPrevVideo());
   }
 
-  function nextVideo() {
+  function handleNextVideo() {
     stopMedia();
-    dispatch({
-      type: 'NEXT_VIDEO',
-    });
+    dispatch(setNextVideo());
   }
 
   React.useEffect(() => {
@@ -156,7 +153,7 @@ export const BotBar: FC<BotBarProps> = ({ videoRef }) => {
             ${isBlocked && 'BotBar__controllBar-button_disabled'}
             BotBar__controllBar-button_prev`}
           aria-label='предыдущий файл'
-          onClick={prevVideo}
+          onClick={handlePrevVideo}
         ></button>
         <button
           className={`BotBar__controllBar-button ${isBlocked && 'BotBar__controllBar-button_disabled'} ${isBackwardWind ?
@@ -181,7 +178,7 @@ export const BotBar: FC<BotBarProps> = ({ videoRef }) => {
             ${isBlocked && 'BotBar__controllBar-button_disabled'}
             BotBar__controllBar-button_next`}
           aria-label='следующий файл'
-          onClick={nextVideo}
+          onClick={handleNextVideo}
         ></button>
       </div>
       <ProgressBar />
