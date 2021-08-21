@@ -38,7 +38,7 @@ export default function TopBar() {
       .then(res => {
         dispatch({
           type: 'SET_VIDEO',
-          payload: [res.videoUrl, res.videoType],
+          payload: [{ videoUrl: res.videoUrl, videoType: res.videoType }],
         });
       })
       .catch(err => console.log(err));
@@ -47,7 +47,10 @@ export default function TopBar() {
   function openFolder() {
     ipcRenderer.invoke('open-folder-event')
       .then(res => {
-        console.log(res);
+        dispatch({
+          type: 'SET_VIDEO',
+          payload: res,
+        });
       })
       .catch(err => console.log(err));
   }

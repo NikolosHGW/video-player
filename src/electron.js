@@ -5,7 +5,6 @@ const isDev = require('electron-is-dev');
 const fs = require('fs');
 
 const extVideoMap = new Map([
-  ['.mkv', '.mkv'],
   ['.avi', '.avi'],
   ['.mp4', '.mp4']
 ]);
@@ -111,6 +110,9 @@ ipcMain.handle('open-folder-event', async () => {
       const extension = path.extname(file);
       return extension === extVideoMap.get(extension);
     })
-    .map(videoFile => `${dirPath}/${videoFile}`);
+    .map(videoFile => ({
+      videoUrl: `${dirPath}/${videoFile}`,
+      videoType: path.extname(videoFile).slice(1),
+    }));
   return videoUrls;
 });

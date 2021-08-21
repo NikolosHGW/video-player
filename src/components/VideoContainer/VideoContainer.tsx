@@ -7,11 +7,13 @@ interface VideoContainerProps {
 }
 
 export const VideoContainer: FC<VideoContainerProps> = ({ videoRef }) => {
-  const { videoUrl, videoType } = useTypeSelector(state => state.video);
+  const { videos, currentIndex } = useTypeSelector(state => state.video);
+  const { videoUrl, videoType } = videos[currentIndex] ?
+   videos[currentIndex] : { videoUrl: undefined, videoType: undefined };
 
   React.useEffect(() => {
     videoRef?.current?.load();
-  }, [videoRef, videoUrl]);
+  }, [videoRef, videos, currentIndex]);
 
   return (
     <div className='VideoContainer'>

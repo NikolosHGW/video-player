@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+import { useDispatch } from 'react-redux';
 import { useTypeSelector } from '../../redux/hooks/useTypeSelector';
 import ProgressBar from '../ProgressBar/ProgressBar';
 import './BotBar.css';
@@ -14,7 +15,10 @@ export const BotBar: FC<BotBarProps> = ({ videoRef }) => {
   const [isBackwardWind, setIsBackwardWind] = React.useState<boolean>(false);
   const [intervalFwd, setIntervalFwd] = React.useState<NodeJS.Timeout | null>(null);
   const [intervalRwd, setIntervalRwd] = React.useState<NodeJS.Timeout | null>(null);
-  const { videoUrl } = useTypeSelector(state => state.video);
+  const { videos, currentIndex } = useTypeSelector(state => state.video);
+  const dispatch = useDispatch();
+  const { videoUrl } = videos[currentIndex] ?
+   videos[currentIndex] : { videoUrl: undefined };
 
   function resetBackwardInterval() {
     clearInterval(intervalRwd!);
@@ -104,6 +108,20 @@ export const BotBar: FC<BotBarProps> = ({ videoRef }) => {
     }
   }
 
+  function prevVideo() {
+    stopMedia();
+    dispatch({
+      type: 'PREV_VIDEO',
+    });
+  }
+
+  function nextVideo() {
+    stopMedia();
+    dispatch({
+      type: 'NEXT_VIDEO',
+    });
+  }
+
   React.useEffect(() => {
     if (!videoUrl) {
       setIsBlocked(true);
@@ -116,7 +134,8 @@ export const BotBar: FC<BotBarProps> = ({ videoRef }) => {
     <div className='BotBar'>
       <div className='BotBar__controllBar'>
         <button
-          className={`BotBar__controllBar-button ${isBlocked && 'BotBar__controllBar-button_disabled'} ${isPlayed ?
+          className={`BotBar__controllBar-button
+            ${isBlocked && 'BotBar__controllBar-button_disabled'} ${isPlayed ?
             'BotBar__controllBar-button_pause'
             :
             'BotBar__controllBar-button_play'}`}
@@ -125,12 +144,20 @@ export const BotBar: FC<BotBarProps> = ({ videoRef }) => {
           disabled={isBlocked}
         ></button>
         <button
-          className={`BotBar__controllBar-button ${isBlocked && 'BotBar__controllBar-button_disabled'} BotBar__controllBar-button_stop`}
+          className={`BotBar__controllBar-button
+            ${isBlocked && 'BotBar__controllBar-button_disabled'}
+            BotBar__controllBar-button_stop`}
           aria-label='остановить'
           onClick={stopMedia}
           disabled={isBlocked}
         ></button>
-        <button className={`BotBar__controllBar-button ${isBlocked && 'BotBar__controllBar-button_disabled'} BotBar__controllBar-button_prev`} aria-label='предыдущий файл'></button>
+        <button
+          className={`BotBar__controllBar-button
+            ${isBlocked && 'BotBar__controllBar-button_disabled'}
+            BotBar__controllBar-button_prev`}
+          aria-label='предыдущий файл'
+          onClick={prevVideo}
+        ></button>
         <button
           className={`BotBar__controllBar-button ${isBlocked && 'BotBar__controllBar-button_disabled'} ${isBackwardWind ?
             'BotBar__controllBar-button_back_active'
@@ -149,7 +176,13 @@ export const BotBar: FC<BotBarProps> = ({ videoRef }) => {
           onClick={mediaForward}
           disabled={isBlocked}
         ></button>
-        <button className={`BotBar__controllBar-button ${isBlocked && 'BotBar__controllBar-button_disabled'} BotBar__controllBar-button_next`} aria-label='следующий файл'></button>
+        <button
+          className={`BotBar__controllBar-button
+            ${isBlocked && 'BotBar__controllBar-button_disabled'}
+            BotBar__controllBar-button_next`}
+          aria-label='следующий файл'
+          onClick={nextVideo}
+        ></button>
       </div>
       <ProgressBar />
       <div className='BotBar__time'>
